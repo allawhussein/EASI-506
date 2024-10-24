@@ -16,9 +16,12 @@ def getHumidity() -> int:
     
     return humidity
 
-def log(message : str) -> None:
-    with open("./logs.txt", 'a') as logFile:
-        logFile.write(str(datetime.datetime.now()) + ", " + message + "\n")
+def log(message : BaseException) -> None:
+    try:
+        with open("./logs.txt", 'a') as logFile:
+            logFile.write(str(datetime.datetime.now()) + ", " + str(message.args) + "\n")
+    except:
+        pass
 
 def main():
     fanTurnedOn = False
