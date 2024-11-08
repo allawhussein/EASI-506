@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LED Control Panel</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+text-align: center;
+margin-top: 50px;
+}
+button {
+padding: 10px 20px;
+margin: 10px;
+font-size: 16px;
+}
+</style>
+</head>
+<body>
+    <h1>LED Control Panel</h1>
+    <div>
+    <h2>Red LED</h2>
+    <button onclick="controlRedLed('on')">Turn On</button>
+    <button onclick="controlRedLed('off')">Turn Off</button>
+    </div>
+    <div>
+    <h2>Green LED</h2>
+    <button onclick="controlGreenLed('on')">Turn On</button>
+    <button onclick="controlGreenLed('off')">Turn Off</button>
+    </div>
+    <script>
+    function controlRedLed(state) {
+    fetch(`/led/red/${state}`).then(response => response.text()).then(data => {
+    alert(data);
+    });
+    }
+    function controlGreenLed(state) {
+    fetch(`/led/green/${state}`).then(response => response.text()).then(data => {
+    alert(data);
+    });
+    }
+    </script>
+    </body>
+</html>
