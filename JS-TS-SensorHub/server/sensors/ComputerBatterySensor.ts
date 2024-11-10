@@ -1,7 +1,7 @@
 import IBasicNumericSensor from "../../interfaces/IBasicSensor";
 import * as net from 'net';
 
-class ComputerBatterySensor implements IBasicNumericSensor {
+export default class ComputerBatterySensor implements IBasicNumericSensor {
 
     // IBasicSensor Implementation
     readonly name: string;
