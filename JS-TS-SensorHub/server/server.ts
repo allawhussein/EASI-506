@@ -1,7 +1,8 @@
 import * as express from 'express'
 import ComputerBatterySensor from "./sensors/ComputerBatterySensor"
 import ComputerTemperatureSensor from "./sensors/ComputerTemperatureSensor"
-import { cp } from 'fs';
+import ComputerCpuConsumptionSensor from "./sensors/ComputerCpuConsumptionSensor"
+import ComputerRamUsageSensor from './sensors/ComputerRamConsumptionSensor'
 
 const app = express();
 app.use(express.static('public'));
@@ -24,6 +25,30 @@ app.get('/cpuTemperature', async (req: express.Request, res: express.Response) =
         else {
             cpuTemperature = cpuTemperature / 10 - 273;
             res.json({"response":cpuTemperature});
+        }
+    } catch (err) {
+        res.status(500).json({"error":err});
+    }
+});
+app.get('/cpuLoad', async (req: express.Request, res: express.Response) => {
+    try {
+        const instance = new ComputerCpuConsumptionSensor( 3, "Test3" );
+        var cpuLoad:number = await instance.getData()
+        if (cpuLoad == -1) res.status(500).json({"error":"Failed to get battery percentage"});
+        else {
+            res.json({"response":cpuLoad});
+        }
+    } catch (err) {
+        res.status(500).json({"error":err});
+    }
+});
+app.get('/ramUsage', async (req: express.Request, res: express.Response) => {
+    try {
+        const instance = new ComputerRamUsageSensor( 2, "Test2" );
+        var ramUsage:number = await instance.getData()
+        if (ramUsage == -1) res.status(500).json({"error":"Failed to get battery percentage"});
+        else {
+            res.json({"response":ramUsage});
         }
     } catch (err) {
         res.status(500).json({"error":err});

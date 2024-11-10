@@ -40,7 +40,15 @@ function ListenForConnections {
             } elseif ($message -eq "cpuTemperature") {
                 Write-Host "Getting CPU temperature"
                 $response = iex((Get-WmiObject MSAcpi_ThermalZoneTemperature -Namespace "root/wmi").CurrentTemperature[0])
-            } else {
+            } elseif ($message -eq "cpuLoad") {
+                Write-Host "Getting CPU Load"
+                $response = iex((Get-WmiObject Win32_Processor).LoadPercentage)
+            } elseif ("ramUsage") {
+                $totalRam = (Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB # return is in bytes
+                $freeRam = (Get-CIMInstance Win32_OperatingSystem).FreePhysicalMemory / 1MB # return is in KB
+                $response = (($totalRam - $freeRam) / $totalRam * 100).ToString()
+            }
+            else {
                 $response = "error"
             }
             Write-Host "Operation Result $response"
