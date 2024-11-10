@@ -1,16 +1,45 @@
 import IBasicNumericSensor from "../../interfaces/IBasicSensor";
+import * as net from 'net';
 
-class ComputerTemperatureSensor implements IBasicNumericSensor {
+export default class ComputerTemperatureSensor implements IBasicNumericSensor {
 
     // IBasicSensor Implementation
     readonly name: string;
     readonly id: number;
 
-    getData(): Promise<number> {
-        throw new Error("Method not implemented. Requires a services to avoid administrator privileges");
-        // (Get-WmiObject MSAcpi_ThermalZoneTemperature -Namespace "root/wmi")
-        // actual implementation requires interface with WMI with administrator privilege
-        // which is unrecommended for a web application
+    async getData(): Promise<number> {
+        try {
+            const serverAddress = '127.0.0.1';
+            const serverPort = 8080;
+            const message = 'cpuTemperature';
+            // Create a socket
+            const clientSocket = new net.Socket();
+            // Connect to the server
+            await new Promise<void>((resolve, reject) => { clientSocket.connect(
+                serverPort, 
+                serverAddress, 
+                () => {resolve();}
+            ).on('error', reject);
+            });
+            // Send the message
+            clientSocket.write(message);
+            // Receive the response
+            let responseData = '';
+            clientSocket.on('data', (chunk) => {
+              responseData += chunk.toString();
+            });
+            // Wait for the response
+            await new Promise((resolve) => {
+              clientSocket.once('end', resolve);
+            });
+            console.log('Response:', responseData);
+            // Close the connection
+            clientSocket.end()
+            return parseInt(responseData);
+          } catch (error) {
+            console.error('Error occurred:', error);
+            return -1;
+          }
     }
     
     constructor (id: number, name: string) {
