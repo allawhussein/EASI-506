@@ -1,0 +1,10 @@
+> npm install -g ts-node typescript '@types/node'
+use this to run "ts-node" directly on the command line
+
+> npm install '@types/...'
+replace ... with something, this command will install the required package for typescript
+
+How to run typescript with ESM
+> tsc server.ts
+> node server.js
+various approaches @ https://stackoverflow.com/questions/62096269/unknown-file-extension-ts-for-a-typescript-file failed
