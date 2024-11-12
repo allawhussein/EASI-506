@@ -6,6 +6,7 @@
     "express": "^4.21.1",
     "net": "^1.0.2",
     "react-gauge-component": "^1.2.6",
+    "tsc": "^2.0.4",
     "typescript": "^5.6.3"
   }
 }
