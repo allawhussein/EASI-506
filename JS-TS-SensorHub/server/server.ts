@@ -3,6 +3,7 @@ import ComputerBatterySensor from "./sensors/ComputerBatterySensor"
 import ComputerTemperatureSensor from "./sensors/ComputerTemperatureSensor"
 import ComputerCpuConsumptionSensor from "./sensors/ComputerCpuConsumptionSensor"
 import ComputerRamUsageSensor from './sensors/ComputerRamConsumptionSensor'
+import randomSensor from './sensors/randomSensor'
 
 const app = express();
 app.use(express.static('public'));
@@ -49,7 +50,18 @@ app.get('/ramUsage', async (req: express.Request, res: express.Response) => {
         if (ramUsage == -1) res.status(500).json({"error":"Failed to get battery percentage"});
         else {
             res.json({"response":ramUsage});
-        }
+  
+      }
+    } catch (err) {
+        res.status(500).json({"error":err});
+    }
+});
+app.get('/randomSensor', async (req: express.Request, res: express.Response) => {
+    try {
+        const instance = new randomSensor(  );
+        const random = await instance.getData()
+        
+        res.json({"response":random});
     } catch (err) {
         res.status(500).json({"error":err});
     }
